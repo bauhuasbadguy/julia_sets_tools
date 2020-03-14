@@ -7,10 +7,19 @@ Created on Fri Mar 13 00:00:10 2020
 """
 
 #moving julia set generator
+import os
 import time
+
+
+import matplotlib
+# Force matplotlib to not use any Xwindows backend.
+matplotlib.use('Agg')
+
 import matplotlib.pyplot as plt
 
 from PIL import Image
+
+import subprocess
 
 import julia_image_generator as jig
 
@@ -21,7 +30,7 @@ class powerExplosionCalculator(object):
     def __init__(self):
         
         self.powerLevel = 2
-        self.order = 15
+        self.order = 25
         self.rad = 2
     
     #the function for calculating the explosion needs to take in a complex number
@@ -40,12 +49,35 @@ class powerExplosionCalculator(object):
         
         #need to return a status and a value
         return False, 0
+    
+    
+def pad_number(number, pad_len=3):
+    
+    number = str(number)
+    
+    numberLen = len(number)
+    
+    if numberLen > pad_len:
+        raise Exception('Number is bigger than the pad length')
+        
+    padsNo = pad_len - numberLen
+    
+    for p in range(padsNo):
+        
+        number = '0' + number
+        
+    return number
 
 ###################################
 ### End of function definitions ###
 ###################################
 
 
+save_folder = './tmp/'
+
+if not os.path.exists(save_folder):
+
+    os.mkdir(save_folder)
     
 calcer = powerExplosionCalculator()
 
@@ -53,6 +85,7 @@ start_time = time.time()
 
 
 resolution = (1080, 1920)
+#resolution = (500, 840)
 
 xlim = [-2.0, 2.0]
 ylim = [-1.2, 1.2]
@@ -61,20 +94,35 @@ extent = xlim + ylim
 
 lims = [xlim, ylim]
 
-plane = jig.generate_image(resolution, lims, calcer.calc_explosion)
+values = list(range(0, 601))
 
+values[:] = [x/100 for x in values]
 
-plt.figure(figsize=(1080/100, 1920/100), dpi=100)
-plt.imshow(plane, extent=extent, cmap='hot')
-plt.axis('off')
+#iterate through a series of values for the power value
+for vi, v in enumerate(values):
+    
+    calcer.powerLevel = v
 
-frameNo = '0'
+    plane = jig.generate_image(resolution, lims, calcer.calc_explosion)
+    
+    plt.figure(figsize=(1080/100, 1920/100), dpi=300)
+    plt.imshow(plane, extent=extent, cmap='hot')
+    plt.axis('off')
+    
+    frameNo = pad_number(vi)
+    
+    save_name = os.path.join(save_folder, frameNo + '.png')
+    
+    plt.savefig(save_name, bbox_inches='tight', pad_inches=0, dpi=300)
+    #plt.imshow(plane, cmap='hot')
+               #cmap='copper')
+    plt.close('all')
+    #plt.show()
 
-plt.savefig('{0}.png'.format(frameNo), bbox_inches='tight', pad_inches=0)
-#plt.imshow(plane, cmap='hot')
-           #cmap='copper')
-plt.close('all')
-#plt.show()
+#generate the video
+subprocess.call(["ffmpeg", "-framerate", "15", "-i", "./tmp/%03d.png", "-crf", "20",  "./output/high_res_powers.mp4"])
+
+#os.remove('./tmp')
 
 print("TOOK {0}s".format(time.time() - start_time))
         
