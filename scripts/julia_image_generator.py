@@ -11,7 +11,7 @@ Created on Thu Mar 12 23:46:12 2020
 import numpy as np
 
 
-def generate_image(resolution, lims, explosion_function):
+def generate_image(resolution, lims, explosion_function, stableZero=True):
     
     [xlims, ylims] = lims
     
@@ -41,7 +41,7 @@ def generate_image(resolution, lims, explosion_function):
             result = explosion_function(c)
             
             #check if its exploded, if not leave it as zero
-            if result[0]:
+            if result[0] or not stableZero:
                 
                 plane[yi, xi] = result[1]
     
