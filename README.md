@@ -3,11 +3,9 @@ A series of programs designed for examining julia sets. The code is all in the s
 
 ## Examples ##
 
-<img src='./high_res_powers.gif' height=300px; float='left'>
+<img src='./high_res_powers.gif' height=300px>
 
-<img src='./theta_p2.gif' height=300px; float=right>
-
-<img src='./theta_p3.gif' height=300px; float=right>
+<img src='./theta_p2.gif' height=300px>｜<img src='./theta_p3.gif' height=300px>
 
 ## Files ##
 
