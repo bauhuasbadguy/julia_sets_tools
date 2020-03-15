@@ -15,6 +15,8 @@ import matplotlib.pyplot as plt
 
 plt.close('all')
 
+import julia_image_generator as jig
+
 #here is an explosion calculator for a simple power julia set
 class explosionCalculator(object):
 
@@ -41,67 +43,31 @@ class explosionCalculator(object):
         #need to return a status and a value
         return False, 0
 
-#this is the function for generating the images
-def generate_image(resolution, lims, explosion_function):
-    
-    [xlims, ylims] = lims
-    
-    plane = np.zeros(resolution)
-    
-    xstep = (xlims[1] - xlims[0])/resolution[1]
-    ystep = (ylims[1] - ylims[0])/resolution[0]
-    
-    #find the values of all the points
-    xpoints = [(xi * xstep) + xlims[0] for xi in range(resolution[1]+1)]
-    ypoints = [(yi * ystep) + ylims[0] for yi in range(resolution[0]+1)]
-    
-    for yi, ys in enumerate(plane):
-        
-        #print(len(xs))
-        
-        for xi, xs in enumerate(ys):
-            
-            #find x and y
-            x = xpoints[xi]
-            y = ypoints[yi]
-        
-            #convert x and y to a point in the complex plane
-            c = complex(x, y)
-            
-            #calculate the rate of explosion this function can be swapped out if you want
-            result = explosion_function(c)
-            
-            #check if its exploded, if not leave it as zero
-            if result[0]:
-                
-                plane[yi, xi] = result[1]
-    
-    return plane
-
-    
-
 ###################################
 ### End of function definitions ###
 ###################################
 start_time = time.time()
 
-r = 2
-
 #1080p resolution
 resolution = (1080, 1920)
 
+#set the limits in x and y
 xlims = [-2.2, 1.2]
 ylims = [-1.2, 1.2]
 
+#set up the class so we can tune parameters being used if we so wish
 calcer = explosionCalculator()
 
-plane = generate_image(resolution, [xlims, ylims], explosion_function=calcer.calc_explosion)
+#generate our image
+plane = jig.generate_image(resolution, [xlims, ylims], explosion_function=calcer.calc_explosion)
 
+#set the limits of the image
 extent = xlims + ylims
+
+#generate the image
 plt.figure()
 plt.imshow(plane, extent=extent, cmap='hot')
-#plt.imshow(plane, cmap='hot')
-           #cmap='copper')
+
 plt.show()
 
 print("TOOK {0}s".format(time.time() - start_time))

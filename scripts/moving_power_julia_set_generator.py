@@ -50,7 +50,8 @@ class powerExplosionCalculator(object):
         #need to return a status and a value
         return False, 0
     
-    
+#when you build the video the files are ordered alphabetically so I use this function
+#to make sure the filenames are in alphabetical order
 def pad_number(number, pad_len=3):
     
     number = str(number)
@@ -83,7 +84,7 @@ calcer = powerExplosionCalculator()
 
 start_time = time.time()
 
-
+#a high res video. You might want to set this lower to make sure it gets done quick
 resolution = (1080, 1920)
 #resolution = (500, 840)
 
@@ -101,16 +102,19 @@ values[:] = [x/100 for x in values]
 #iterate through a series of values for the power value
 for vi, v in enumerate(values):
     
+    #change the value of the power we are using. This is why we use a class
     calcer.powerLevel = v
-
+    
+    #generate the data for the image
     plane = jig.generate_image(resolution, lims, calcer.calc_explosion)
     
+    #generate the image notice I lock in the colour range
     plt.figure(figsize=(1080/100, 1920/100), dpi=300)
-    plt.imshow(plane, extent=extent, cmap='hot')
+    plt.imshow(plane, extent=extent, cmap='hot', vmin=0, vmax=25)
     plt.axis('off')
     
+    #generate the filename
     frameNo = pad_number(vi)
-    
     save_name = os.path.join(save_folder, frameNo + '.png')
     
     plt.savefig(save_name, bbox_inches='tight', pad_inches=0, dpi=300)
@@ -122,7 +126,12 @@ for vi, v in enumerate(values):
 #generate the video
 subprocess.call(["ffmpeg", "-framerate", "15", "-i", "./tmp/%03d.png", "-crf", "20",  "./output/high_res_powers.mp4"])
 
-#os.remove('./tmp')
+#remove the raw frames of the video
+files = os.listdir('./tmp/')
+
+for file in files:
+    fname = os.path.join('./tmp', file)
+    os.remove(fname)
 
 print("TOOK {0}s".format(time.time() - start_time))
         
