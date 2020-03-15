@@ -92,7 +92,7 @@ start_time = time.time()
 #resolution = (1080, 1080)
 resolution = (540, 540)
 
-limit = 2.5
+limit = 2
 
 xlim = [-limit, limit]
 ylim = [-limit, limit]
@@ -109,7 +109,7 @@ values[:] = [((2 * math.pi)/361) * x for x in values]
 
 order = 25
 
-calcer.powerLevel=1.5
+calcer.powerLevel=3
 calcer.order = order
 
 for vi, v in enumerate(values):
@@ -138,7 +138,7 @@ subprocess.call(["ffmpeg",
                  "-framerate", "15", 
                  "-i", "./tmp/%03d.png", 
                  "-crf", "20",  
-                 "./output/testing_p1-5_theta_order_{1}.mp4".format(order)])
+                 "./output/testing_p2_theta_order_{1}.mp4".format(order)])
 
 files = os.listdir('./tmp/')
 
