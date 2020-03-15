@@ -3,7 +3,7 @@ A series of programs designed for examining julia sets. The code is all in the s
 
 ## Examples ##
 
-<div align:center><img src='./high_res_powers.gif' height=340px></div>
+<div align="center"><img src='./high_res_powers.gif' height=340px></div>
 
 <img src='./theta_p2.gif' height=340px>｜<img src='./theta_p3.gif' height=340px>
 
