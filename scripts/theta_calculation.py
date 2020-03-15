@@ -57,7 +57,7 @@ class thetaExplosionCalculator(object):
                 return True, i
         
         #need to return a status and a value
-        return False, 50
+        return False, self.order
     
     
 def pad_number(number, pad_len=3):
@@ -89,11 +89,13 @@ calcer = thetaExplosionCalculator()
 start_time = time.time()
 
 
-resolution = (1080, 1920)
-#resolution = (500, 840)
+#resolution = (1080, 1080)
+resolution = (540, 540)
 
-xlim = [-2.0, 2.0]
-ylim = [-2, 2]
+limit = 2.5
+
+xlim = [-limit, limit]
+ylim = [-limit, limit]
 
 extent = xlim + ylim
 
@@ -105,7 +107,10 @@ values[:] = [((2 * math.pi)/361) * x for x in values]
 
 #values = [math.pi]
 
-calcer.powerLevel=3
+order = 25
+
+calcer.powerLevel=1.5
+calcer.order = order
 
 for vi, v in enumerate(values):
 
@@ -114,21 +119,31 @@ for vi, v in enumerate(values):
     plane = jig.generate_image(resolution, lims, calcer.calc_explosion, stableZero=False)
     
     plt.figure()
-    plt.imshow(plane, extent=extent, cmap='seismic')
+    plt.imshow(plane, extent=extent, cmap='seismic', vmin=0, vmax=order)
     plt.axis('off')
     
     frameNo = pad_number(vi)
     
     save_name = os.path.join(save_folder, frameNo + '.png')
     
-    plt.savefig(save_name, bbox_inches='tight', pad_inches=0, dpi=300)
+    #break
+    
+    plt.savefig(save_name, bbox_inches='tight', pad_inches=0, dpi=150)
     
     plt.close('all')
 
 
 
-subprocess.call(["ffmpeg", "-framerate", "15", "-i", "./tmp/%03d.png", "-crf", "20",  "./output/testing_theta.mp4"])
+subprocess.call(["ffmpeg", 
+                 "-framerate", "15", 
+                 "-i", "./tmp/%03d.png", 
+                 "-crf", "20",  
+                 "./output/testing_p1-5_theta_order_{1}.mp4".format(order)])
 
-os.remove('./tmp/*')
+files = os.listdir('./tmp/')
+
+for file in files:
+    fname = os.path.join('./tmp', file)
+    os.remove(fname)
 #plt.show()
 
