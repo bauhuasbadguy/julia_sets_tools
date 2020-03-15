@@ -5,7 +5,7 @@ A series of programs designed for examining julia sets. The code is all in the s
 
 <div align="center"><img src='./high_res_powers.gif' height=340px></div>
 
-<img src='./theta_p2.gif' height=340px>｜<img src='./theta_p3.gif' height=340px>
+<img src='./theta_p2.gif' height=320px>｜<img src='./theta_p3.gif' height=320px>|<img src='./theta_p15.gif' height=320px>
 
 ## Files ##
 

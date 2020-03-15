@@ -138,7 +138,7 @@ subprocess.call(["ffmpeg",
                  "-framerate", "15", 
                  "-i", "./tmp/%03d.png", 
                  "-crf", "20",  
-                 "./output/testing_p2_theta_order_{0}.mp4".format(order)])
+                 "./output/testing_p15_theta_order_{0}.mp4".format(order)])
 
 files = os.listdir('./tmp/')
 
