@@ -105,6 +105,8 @@ values[:] = [((2 * math.pi)/361) * x for x in values]
 
 #values = [math.pi]
 
+calcer.powerLevel=3
+
 for vi, v in enumerate(values):
 
     calcer.theta = v
@@ -125,23 +127,8 @@ for vi, v in enumerate(values):
 
 
 
-subprocess.call(["ffmpeg", "-framerate", "15", "-i", "./tmp/%03d.png", "-crf", "20",  "./tmp/testing_theta.mp4"])
+subprocess.call(["ffmpeg", "-framerate", "15", "-i", "./tmp/%03d.png", "-crf", "20",  "./output/testing_theta.mp4"])
+
+os.remove('./tmp/*')
 #plt.show()
 
-'''
-#iterate through a series of values for the power value
-for vi, v in enumerate(values):
-    
-    calcer.powerLevel = v
-
-    plane = jig.generate_image(resolution, lims, calcer.calc_explosion)
-    
-    plt.figure(figsize=(1080/100, 1920/100), dpi=300)
-    plt.imshow(plane, extent=extent, cmap='hot')
-    plt.axis('off')
-    
-    frameNo = pad_number(vi)
-    
-    save_name = os.path.join(save_folder, frameNo + '.png')
-    
- '''
